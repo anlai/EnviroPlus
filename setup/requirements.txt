@@ -1,0 +1,4 @@
+python-aqi==0.6.1
+gpiozero==1.5.1
+psutil==5.7.2
+influxdb-client[ciso]
