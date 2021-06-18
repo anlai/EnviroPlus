@@ -1,0 +1,16 @@
+# InfluxDB connection settings
+INFLUX_CONFIG_PATH = "{{ enviro_root }}/src/config.ini"
+INFLUX_BUCKET = "{{ influxdb_bucket }}"
+INFLUX_ORG = "{{ influxdb.org }}"
+
+# Enable verbose output of sensor data
+VERBOSE = True
+
+# Interval between polling of data
+INTERVAL = {{ interval }}
+
+TEMP_FACTOR = {{ temp_factor }}
+
+# Information for the Display
+CITY_NAME="{{ city }}"
+TIME_ZONE="{{ time_zone }}"

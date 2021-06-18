@@ -1,0 +1,24 @@
+---
+
+- name: Setup Service
+  block:
+  - name: Drop Service File
+    template:
+      src: ./templates/envplus.service.j2
+      dest: /etc/systemd/system/envplus.service
+      mode: 0644
+      
+  - name: Systemctl Reload Daemon
+    systemd:
+      daemon_reload: yes
+
+  - name: Start Envplus
+    systemd:
+      name: envplus
+      state: started
+      enabled: yes
+
+  - name: Reboot
+    reboot:
+    when: initial_install
+  become: yes

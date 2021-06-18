@@ -1,1 +1,37 @@
 ---
+
+- name: Air Quality Sensor Setup
+  hosts: airquality
+  remote_user: pi
+
+  vars:
+    home_dir: "/home/pi"
+    enviro_root: "{{ home_dir }}/enviro"
+    influxdb_bucket: "aqi"
+    interval: 1
+    temp_factor: .9
+    city: San Francisco # Cities from here https://astral.readthedocs.io/en/latest/#cities
+    time_zone: America/Los_Angeles
+    influxdb:
+      host: HOST_ADDRESS
+      port: 443
+      org: ORGNAME_HERE
+      token: TOKEN_HERE
+
+  tasks:
+
+  - debug:
+      var: initial_install
+
+  - name: Initial Install Steps
+    include_tasks:
+      file: './initial.yml'
+    when: initial_install
+
+  - name: Install App
+    include_tasks:
+      file: './app.yml'
+  
+  - name: Setup Service
+    include_tasks:
+      file: './service.yml'

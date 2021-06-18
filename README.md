@@ -15,4 +15,14 @@ The above components are required just for the software to work, but if you want
 
 ## Setup
 
+You can use the Ansible playbook to set up and deploy this but you'll need to do a couple of manual setup things first.  You'll want to configure the Pi for headless configuration [instructions here](https://www.raspberrypi.org/documentation/configuration/wireless/headless.md).  As well as enabling ssh by creating an empty file named `ssh` in the root of the sd card.
+
+Once you have it booted up and connected to your wifi, you need to configure a few items:
+- open `raspi-config`
+  - set the password for the pi user
+  - set the hostname (this will get used as a tag in the data)
+  - expand the file system
+- (optional) pull in your SSH certificate
+- run apt update and upgrade
+
 ## Configuration

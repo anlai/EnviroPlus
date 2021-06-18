@@ -1,0 +1,29 @@
+---
+
+- name: Clone Enviro
+  git:
+    repo: https://github.com/anlai/EnviroPlus.git
+    dest: "{{ enviro_root }}"
+    version: "main"
+    force: yes
+
+- name: Install PIP Requirements
+  pip:
+    requirements: "{{ enviro_root }}/setup/requirements.txt"
+
+- name: Settings
+  template:
+    src: ./templates/settings.py.j2
+    dest: "{{ enviro_root }}/src/settings.py"
+
+- name: InfluxDB Settings
+  template:
+    src: ./templates/config.ini.j2
+    dest: "{{ enviro_root }}/src/config.ini"
+
+- name: Set Owner of envplus.py
+  file:
+    path: "{{ enviro_root }}/src"
+    owner: pi
+    group: pi
+    recurse: yes

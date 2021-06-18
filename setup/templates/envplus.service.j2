@@ -1,0 +1,13 @@
+[Unit]
+Description=Enviroplus Collector
+After=network.target
+
+[Service]
+User=pi
+Group=pi
+WorkingDirectory={{ enviro_root }}/src
+ExecStart=python3 {{ enviro_root }}/src/envplus.py
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,59 @@
+---
+
+- name: Install Packages & Configure Python
+  block:
+  - name: Install Required Apt Packages
+    apt:
+      pkg:
+        - git
+        - python3-pip
+      state: present
+
+  - name: Check for Python Backup
+    stat:
+      path: /usr/bin/python2
+    register: python2_stat
+  - name: Rename Python2
+    shell: |
+      mv /usr/bin/python /usr/bin/python2
+    when: not python2_stat.stat.exists
+  - name: Create Python3 Symlink
+    file:
+      src: /usr/bin/python3
+      dest: /usr/bin/python
+      state: link
+  - name: Check for Pip Backup
+    stat:
+      path: /usr/bin/pip-backup
+    register: pip_stat
+  - name: Rename Pip
+    shell: |
+      mv /usr/bin/pip /usr/bin/pip-backup
+    when: not pip_stat.stat.exists
+  - name: Create Pip3 Symlink
+    file:
+      src: /usr/bin/pip3
+      dest: /usr/bin/pip
+      state: link
+  become: yes
+
+# Install Enviro+ Requirements
+- name: Clone Pimoroni Enviro+ Repo
+  git:
+    repo: https://github.com/pimoroni/enviroplus-python.git
+    dest: "{{ home_dir }}/enviroplus-python"
+    version: master
+    force: yes
+
+- name: Replace User Prompt In Install
+  lineinfile:
+    path: "{{ home_dir }}/enviroplus-python/install.sh"
+    regexp: '^if \[ -d "examples" ]; then$'
+    line: 'if false; then'
+    backrefs: yes
+
+- name: Run Install
+  shell:
+    cmd: ./install.sh
+    chdir: "{{ home_dir }}/enviroplus-python"
+  become: yes
