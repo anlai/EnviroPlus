@@ -4,6 +4,7 @@ import sys
 import logging
 import time
 import platform
+import queue
 
 import settings
 from sensors import ambient, pollution
@@ -21,42 +22,38 @@ Press Ctrl+C to exit!
 
 def main():
 
-    try:
-        while True:
+    statusHistory = []
 
+    while True:
+
+        if len(statusHistory) > 4:
+            statusHistory.pop(0)
+
+        try:
             # retrieve the values
             amb = ambient.get_reading()
             pol = pollution.get_reading()
 
             # push data to target
-            points = [{ 
-                "measurement": "enviroplus",
-                "tags": { 'sensor': platform.node() },
-                "fields": {
-                    "pm2_5": pol['pm2.5'],
-                    "pm10": pol['pm10'],
-                    "pm1": pol['pm1'],
-                    "aqi_val": pol['aqi']['aqi-val'],
-                    "aqi": pol['aqi']['aqi'],
-                    "temp": amb['temp'],
-                    "cpu_temp": amb['cpu_temp'],
-                    "humidity": amb['humidity'],
-                    "pressure": amb['pressure'],
-                    "carbon_monoxide": amb['carbon_monoxide'],
-                    "carbon_monoxide_warning": amb['carbon_monoxide_warning'],
-                    "noise": amb['noise']
-                }
-            }]
-            target.pushPoints(points)
+            target.pushData(platform.node(),amb,pol)
+
+            statusHistory.append(True)
 
             # update the display
-            display.update(amb,pol)
+            display.update(amb,pol,statusHistory)
 
             time.sleep(settings.INTERVAL)
+        
+        # Exit cleanly
+        except KeyboardInterrupt:
+            sys.exit(0)
 
-    # Exit cleanly
-    except KeyboardInterrupt:
-        sys.exit(0)
+        except:
+            logging.info(f"ERROR: {sys.exc_info()[0]}")
+            statusHistory.append(False)
+            pass
+
+        logging.info(f"Status History: {statusHistory}")
 
 
 if __name__ == "__main__":

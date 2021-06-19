@@ -219,7 +219,7 @@ def text(img,x,y,reading,reading_range):
     img = overlay_text(img, (x, y + spacing), reading_range, font_sm, align_right=True, rectangle=True)
     return img
 
-def update(amb,pol):
+def update(amb,pol,statusHistory):
     path = os.path.dirname(os.path.realpath(__file__))
     progress, period, day, local_dt = sun_moon_time(settings.CITY_NAME, settings.TIME_ZONE)
     
@@ -248,6 +248,19 @@ def update(amb,pol):
     img = text(img,WIDTH-4*margin,48,str(pol['pm2.5']),'Good')
     pm25_icon = Image.open(f"{path}/icons/pm25.png").convert("RGBA")
     img.paste(pm25_icon,(80,46),mask=pm25_icon)
+
+    # render the status indicators
+    check_icon = Image.open(f"{path}/icons/circle-check.png").convert("RGBA")
+    times_icon = Image.open(f"{path}/icons/circle-times.png").convert("RGBA")
+    x_offset = 49
+    y_offset = 0+margin+3
+    for x in reversed(statusHistory):
+        if x:
+            img.paste(check_icon,(x_offset,y_offset),mask=check_icon)
+        else:
+            img.paste(times_icon,(x_offset,y_offset),mask=times_icon)
+        
+        x_offset = x_offset+8
 
     # render the image
     disp.display(img)

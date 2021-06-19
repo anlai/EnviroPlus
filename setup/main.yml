@@ -7,9 +7,10 @@
   vars:
     home_dir: "/home/pi"
     enviro_root: "{{ home_dir }}/enviro"
-    influxdb_bucket: "aqi"
     interval: 1
+    ## Customize below this line ===
     temp_factor: .9
+    influxdb_bucket: "aqi"
     city: San Francisco # Cities from here https://astral.readthedocs.io/en/latest/#cities
     time_zone: America/Los_Angeles
     influxdb:
