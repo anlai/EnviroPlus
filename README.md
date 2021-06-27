@@ -37,3 +37,4 @@ The 3 options to setup are:
   - [Font Awesome - Times Circle](https://fontawesome.com/v5.15/icons/times-circle?style=solid)
 - Air Quality Icons from:
   - [PM2.5](https://www.iconfinder.com/icons/7304531/pm2.5_dust_pollution_smog_dangerous_unhealthy_particulates_icon)
+  - [Pollution](https://www.iconfinder.com/icons/7304539/aerosol_air_spray_spread_dust_particulates_pollution_icon)
