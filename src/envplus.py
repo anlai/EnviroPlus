@@ -35,7 +35,7 @@ def main():
             pol = pollution.get_reading()
 
             # push data to target
-            target.pushData(platform.node(),amb,pol)
+            # target.pushData(platform.node(),amb,pol)
 
             statusHistory.append(True)
 
